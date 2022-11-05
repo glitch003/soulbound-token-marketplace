@@ -58,7 +58,7 @@ export default function OwnedPKP({pkp, rerender }) {
         </div>}>
         </CardHeader> 
       <div>
-        <h4>NFTs owned by wallet</h4>
+        <h4>NFTs/SBTs owned by wallet</h4>
         {pkp.nftsThisWalletOwns.ownedNfts.length ? pkp.nftsThisWalletOwns.ownedNfts.map((n) => (
           <a
             style={{wordWrap: "break-word"}}
