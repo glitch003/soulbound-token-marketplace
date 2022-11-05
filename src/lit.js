@@ -108,7 +108,9 @@ export const getOwnedPKPs = async ({ signer }) => {
 
   const balance = (await pkpContract.balanceOf(account)).toNumber();
   const pkps = [];
+
   for (let i = 0; i < balance; i++) {
+    console.log("loop", i)
     console.log(`getting owned pkp ${i + 1} of ${balance}`);
     const tokenId = await pkpContract.tokenOfOwnerByIndex(account, i);
     const ethAddress = await pkpContract.getEthAddress(tokenId);
@@ -116,6 +118,7 @@ export const getOwnedPKPs = async ({ signer }) => {
     const openseaUrl = getOpenseaUrl({ tokenId });
     const nftsThisWalletOwns = await getAllNftsOwnedByAddress({ ethAddress });
     pkps.push({ tokenId, ethAddress, openseaUrl, nftsThisWalletOwns });
+  
   }
   console.log("owned PKPs", pkps);
   return pkps;

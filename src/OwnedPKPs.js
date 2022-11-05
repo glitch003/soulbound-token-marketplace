@@ -7,61 +7,36 @@ import {
 } from "./lit";
 import SendPKP from "./SendPKP";
 import SellPKP from "./SellPKP";
+import { Button, Card, CardContent, CardHeader, CircularProgress, Grid, Menu, MenuItem } from "@material-ui/core";
+import { tuncateWalletAddress } from "./utils";
+import OwnedPKP from "./OwnedPKP";
 
 export default function OwnedPKPs() {
   const [ownedPkps, setOwnedPkps] = useState(null);
-  const [loading, setLoading] = useState(false);
+  
   useEffect(() => {
     const go = async () => {
-      console.log("getting owned PKPs");
-      setLoading(true);
       const signer = await getSigner();
-      const ownedPkps = await getOwnedPKPs({ signer });
-      setOwnedPkps(ownedPkps);
-      setLoading(false);
+      const fetchedOwnedPkps = await getOwnedPKPs({ signer });
+      setOwnedPkps(fetchedOwnedPkps);
     };
     go();
   }, []);
+
+
+
   return (
     <div>
-      <h3>Wallets you own</h3>
-      {loading ? <h3>Loading wallets you already own...</h3> : null}
+      <h3>Your Liquid Wallets</h3>
       {ownedPkps ? (
-        <div>
+        <div style={{display: "flex", justifyContent: "center"}}>
+        <Grid justifyContent="center"  container spacing={2}>
           {ownedPkps.map((pkp) => (
-            <div key={pkp.tokenId}>
-              <p>
-                Wallet:{" "}
-                <a
-                  href={`https://mumbai.polygonscan.com/address/${pkp.ethAddress}`}
-                  target="_blank"
-                >
-                  {pkp.ethAddress}
-                </a>
-              </p>
-              <SendPKP tokenId={pkp.tokenId} />
-              <SellPKP tokenId={pkp.tokenId} />
-              <button onClick={() => window.open(pkp.openseaUrl)}>
-                View on OpenSea
-              </button>
-              <div>
-                <h4>Soulbound tokens and NFTs this wallet owns</h4>
-                {pkp.nftsThisWalletOwns.ownedNfts.map((n) => (
-                  <a
-                    href={getOpenseaUrlForAnyNft({
-                      contractAddress: n.contract.address,
-                      tokenId: n.id.tokenId,
-                    })}
-                    target="_blank"
-                  >
-                    {n.metadata.name}
-                  </a>
-                ))}
-              </div>
-            </div>
+            <OwnedPKP pkp={pkp} />
           ))}
+        </Grid>
         </div>
-      ) : null}
+      ) : <CircularProgress />}
     </div>
   );
 }

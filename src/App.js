@@ -12,6 +12,7 @@ window.ethers = ethers;
 window.LitJsSdk = LitJsSdk;
 
 export default function App() {
+  console.log("RENDERING APP")
   return (
     <div className="App">
       <div style={{ height: 100 }}></div>

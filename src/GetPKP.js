@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import LitJsSdk from "lit-js-sdk";
 import { mintPKP, getEthAddress, getSigner } from "./lit";
+import { Button } from '@material-ui/core';
 
 export default function GetPKP() {
   const [ethAddress, setEthAddress] = useState(null);
@@ -30,9 +31,9 @@ export default function GetPKP() {
   return (
     <div>
       <h3>Get a wallet to use to hold your soulbound tokens</h3>
-      <button onClick={handleGetWallet} disabled={loading}>
+      <Button variant="contained" color="primary" onClick={handleGetWallet} disabled={loading}>
         Create Walet
-      </button>
+      </Button>
       {loading ? <h3>Loading....</h3> : null}
       {ethAddress ? (
         <>

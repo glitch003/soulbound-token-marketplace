@@ -1,3 +1,4 @@
+import { MenuItem } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { getSigner, litContractAddresses } from "./lit";
 
@@ -11,8 +12,8 @@ export default function SellPKP(props) {
     window.open(url);
   };
   return (
-    <div>
-      <button onClick={handleSellWallet}>Sell Wallet</button>
-    </div>
+
+      <MenuItem onClick={handleSellWallet}>Sell</MenuItem>
+
   );
 }

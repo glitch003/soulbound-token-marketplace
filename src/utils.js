@@ -6,3 +6,13 @@ export const getAllNftsOwnedByAddress = async ({ ethAddress }) => {
   console.log("resp", resp.data);
   return resp.data;
 };
+
+
+export const tuncateWalletAddress = address => {
+  if(!address)
+  {
+    return ""
+  }
+
+  return address.substring(0,3) + "..." + address.slice(-4)
+}
