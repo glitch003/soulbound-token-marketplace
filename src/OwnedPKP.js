@@ -61,6 +61,7 @@ export default function OwnedPKP({pkp, rerender }) {
         <h4>NFTs owned by wallet</h4>
         {pkp.nftsThisWalletOwns.ownedNfts.length ? pkp.nftsThisWalletOwns.ownedNfts.map((n) => (
           <a
+            style={{wordWrap: "break-word"}}
             href={getOpenseaUrlForAnyNft({
               contractAddress: n.contract.address,
               tokenId: n.id.tokenId,
