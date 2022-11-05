@@ -1,3 +1,4 @@
+import { Grid, LinearProgress } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import {
   getOpenseaUrl,
@@ -5,38 +6,38 @@ import {
   getSigner,
   getOpenseaUrlForAnyNft,
 } from "./lit";
-import SendPKP from "./SendPKP";
-import SellPKP from "./SellPKP";
-import { Button, Card, CardContent, CardHeader, CircularProgress, Grid, Menu, MenuItem } from "@material-ui/core";
-import { tuncateWalletAddress } from "./utils";
+
 import OwnedPKP from "./OwnedPKP";
 
-export default function OwnedPKPs() {
-  const [ownedPkps, setOwnedPkps] = useState(null);
-  
-  useEffect(() => {
-    const go = async () => {
-      const signer = await getSigner();
-      const fetchedOwnedPkps = await getOwnedPKPs({ signer });
-      setOwnedPkps(fetchedOwnedPkps);
-    };
-    go();
-  }, []);
-
+export default function OwnedPKPs({ownedPkps, loading, rerender }) {
 
 
   return (
     <div>
       <h3>Your Liquid Wallets</h3>
-      {ownedPkps ? (
-        <div style={{display: "flex", justifyContent: "center"}}>
+      {loading ?    
+              <div style={{width: "100%",display: "flex", justifyContent: "center"}}>     
+        <div style={{width: 300, borderRadius: 20, background:"rgb(210,252,221)", border: "2px solid black", boxShadow: "10px 5px 5px black", padding:"20px"}} >
+          <LinearProgress />
+          </div>
+        </div>:
+      ownedPkps.length ? (
+        <div style={{display: "flex", justifyContent: "center", margin: 40, marginBottom: 0}}>
         <Grid justifyContent="center"  container spacing={2}>
           {ownedPkps.map((pkp) => (
-            <OwnedPKP pkp={pkp} />
+              <OwnedPKP rerender={rerender} pkp={pkp} />
           ))}
         </Grid>
         </div>
-      ) : <CircularProgress />}
+      ) : 
+        <div style={{width: "100%",display: "flex", justifyContent: "center"}}>   
+          <div style={{width: 300, borderRadius: 20, background:"rgb(210,252,221)", border: "2px solid black", boxShadow: "10px 5px 5px black", padding:"20px"}} >
+          <div style={{width: "300px", height: "40px", display: "flex", justifyContent: "center", alignItems: "center"}}>
+            None
+          </div>
+        </div>
+      </div>
+      }
     </div>
   );
 }

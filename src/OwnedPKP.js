@@ -9,9 +9,10 @@ import {
 import SendPKP from "./SendPKP";
 import SellPKP from "./SellPKP";
 import { Button, Card, CardContent, CardHeader, Grid, Menu, MenuItem, Tooltip } from "@material-ui/core";
-import { tuncateWalletAddress } from "./utils";
+import { copyTextToClipboard, tuncateWalletAddress } from "./utils";
+import { toast } from 'react-toastify';
 
-export default function OwnedPKP({pkp}) {
+export default function OwnedPKP({pkp, rerender }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const menuOpen = Boolean(anchorEl);
@@ -22,11 +23,15 @@ export default function OwnedPKP({pkp}) {
       setAnchorEl(null);
     };
 
-    return  <Grid item xs={4}>
-    <Card sx={{  minWidth: 300 }}  key={pkp.tokenId}>
+    return  <Grid item  xs={4} sm={4} md={4} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+    <div style={{minWidth: 300, maxWidth: 350, borderRadius: 20, background:"rgb(210,252,221)", border: "2px solid black", boxShadow: "10px 5px 5px black", padding:"20px"}}  key={pkp.tokenId}>
       <CardHeader title={
         <div style={{display: "flex", justifyContent: "space-between"}}>
-        <Tooltip title={pkp.ethAddress}><div>{tuncateWalletAddress(pkp.ethAddress)}</div></Tooltip>
+        <Tooltip title="Click to copy"><div onClick={() => {
+            copyTextToClipboard(pkp.ethAddress)
+            toast("Copied address to clipboard")
+            }} 
+            style={{backgroundColor: "rgb(220, 49, 88)", borderRadius: 20, paddingLeft: 10, paddingRight: 10, paddingTop: 3, paddingBottom: 3}}>{tuncateWalletAddress(pkp.ethAddress)}</div></Tooltip>
         <Button 
         variant="contained" 
         color="primary"
@@ -46,13 +51,12 @@ export default function OwnedPKP({pkp}) {
             'aria-labelledby': 'basic-button',
             }}
           >
-            <SendPKP>Send</SendPKP>
+            <SendPKP rerender={rerender} tokenId={pkp.tokenId}>Send</SendPKP>
             <SellPKP tokenId={pkp.tokenId} />
             <MenuItem onClick={() => window.open(pkp.openseaUrl)}>View</MenuItem>
           </Menu>
         </div>}>
         </CardHeader> 
-        <CardContent>
       <div>
         <h4>NFTs owned by wallet</h4>
         {pkp.nftsThisWalletOwns.ownedNfts.length ? pkp.nftsThisWalletOwns.ownedNfts.map((n) => (
@@ -67,7 +71,6 @@ export default function OwnedPKP({pkp}) {
           </a>
         )) : "None"}
       </div>
-      </CardContent>
-    </Card>
+    </div>
   </Grid>
 }

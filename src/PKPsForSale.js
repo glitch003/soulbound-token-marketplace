@@ -8,6 +8,7 @@ import {
   getAllPKPs,
   getOpenseaUrl,
 } from "./lit";
+import { Button, CircularProgress } from "@material-ui/core";
 
 export default function PKPsForSale() {
   const [listings, setListings] = useState(null);
@@ -26,23 +27,11 @@ export default function PKPsForSale() {
     go();
   }, []);
   return (
-    <div>
-      {listings
-        ? listings.map((l) => (
-            <div>
-              Token Id {l.maker_asset_bundle.assets[0].token_id} is for sale for{" "}
-              {ethers.utils.formatEther(l.current_price)}
-              <a
-                href={getOpenseaUrl({
-                  tokenId: l.maker_asset_bundle.assets[0].token_id,
-                })}
-              >
-                {" "}
-                here
-              </a>
-            </div>
-          ))
-        : null}
+    <div style={{display: "flex", justifyContent: "center"}}>
+      <div style={{borderRadius: 20, background:"rgb(210,252,221)", border: "2px solid black", boxShadow: "10px 5px 5px black", padding:"40px", width: 300}}>
+        <h3>Liquid wallets listed for Sale</h3>
+        <Button variant="contained" color="primary" onClick={() => window.open("https://testnets.opensea.io/collection/programmable-keypair-ea1lqt2ty1?search%5BsortAscending%5D=true&search%5BsortBy%5D=UNIT_PRICE&search%5Btoggles%5D%5B0%5D=BUY_NOW")}>View on OpenSea</Button>
+      </div>
     </div>
   );
 }

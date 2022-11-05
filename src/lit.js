@@ -45,6 +45,8 @@ export const getSigner = async () => {
   let account = await signer.getAddress();
   console.log("account: ", account);
 
+  window.account = account
+
   return signer;
 };
 

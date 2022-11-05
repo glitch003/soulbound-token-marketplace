@@ -1,5 +1,6 @@
-import { Box, Button, Card, CardHeader, FormGroup, Input, MenuItem, Modal, TextField } from "@material-ui/core";
+import { Box, Button, Card, CardHeader, FormGroup, Input, LinearProgress, MenuItem, Modal, TextField } from "@material-ui/core";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { getSigner, sendPKP } from "./lit";
 
 
@@ -18,31 +19,39 @@ const style = {
 export default function SendPKP(props) {
   const { tokenId } = props;
   const [toAddress, setToAddress] = useState("");
+  const [loading, setLoading] = useState(false)
   const [modalOpen, setModalOpen] = useState("")
 
 
 
   const handleSendWallet = async () => {
     const signer = await getSigner();
-
-    // setLoading(true);
-    const sendingReceipt = await sendPKP({ signer, toAddress, tokenId });
-    console.log("sendingReceipt", sendingReceipt);
-    // setLoading(false);
+    setLoading(true);
+    await sendPKP({ signer, toAddress, tokenId });
+    setLoading(false);
+    setModalOpen(false)
+    toast(`*Soulbound* token transfered`)
+    props.rerender()
   };
+
+
   return (
     <>
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-      <div variant="outlined" style={{padding: "40px", display: "flex", justifyContent:"center", alignItems:"center", height: "100%"}}>
-        <Card>
-          <div style={{padding: "20px"}}>
-            <CardHeader title="Send Wallet" />
+      <div style={{ display: "flex", justifyContent:"center", alignItems:"center", height: "100%"}}>
+          <div style={{borderRadius: 20, background:"rgb(210,252,221)", border: "2px solid black", boxShadow: "10px 5px 5px black", padding:"20px"}}>
+            <h3 style={{ display: "flex", justifyContent:"center", alignItems:"center"}}>Send liquid wallet</h3>
+            <div style={{ height: 10 }}></div>
+            {loading ? <LinearProgress /> :
             <FormGroup>
-              <TextField id="outlined-basic" label="Address" variant="outlined" /> 
-              <Button variant="contained" color="primary">Send</Button>
+              <TextField id="outlined-basic"  onChange={e => setToAddress(e.target.value)}  label="Address" variant="outlined" /> 
+              <div style={{ height: 30 }}></div>
+              <Button onClick={handleSendWallet} variant="contained" color="primary">Send</Button>              
+              <div style={{ height: 10 }}></div>
+              <Button onClick={() => setModalOpen(false)} variant="contained" color="secondary">Cancel</Button>
             </FormGroup>
-          </div>
-        </Card>
+            }
+            </div>
         </div>
       </Modal>
       <MenuItem variant="contained" color="primary"  onClick={() => setModalOpen(true)}>Send</MenuItem>

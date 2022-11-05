@@ -1,5 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+  <style>
+    html { background-image: linear-gradient(to right, #c6ffdd, #fbd786, #f7797d); }
+  </style>
+  <style>
+  .text-anim {
+	background: linear-gradient(-45deg, #6355a4, #6355a4, #e89a3e, #e89a3e);
+	background-size: 300%;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: 900;
+	font-size: 5vw;
+	letter-spacing: -5px;
+	text-transform: uppercase;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	animation: animated_text 5s linear infinite;
+
+}
+
+@keyframes animated_text {
+	0% { background-position: 0px 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0px 50%; }
+}
+
+  </style>
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
