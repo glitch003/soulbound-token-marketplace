@@ -138,5 +138,9 @@ export const getAllPKPs = async ({ signer }) => {
 };
 
 export const getOpenseaUrlForAnyNft = ({ contractAddress, tokenId }) => {
+  if (tokenId.includes("0x")) {
+    // convert to int string
+    tokenId = ethers.BigNumber.from(tokenId).toString();
+  }
   return `https://testnets.opensea.io/assets/mumbai/${contractAddress}/${tokenId.toString()}`;
 };

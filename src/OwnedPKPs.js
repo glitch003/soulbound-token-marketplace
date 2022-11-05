@@ -50,8 +50,9 @@ export default function OwnedPKPs() {
                   <a
                     href={getOpenseaUrlForAnyNft({
                       contractAddress: n.contract.address,
-                      tokenId: n.id.tokenId, // nneed to convert to int
+                      tokenId: n.id.tokenId,
                     })}
+                    target="_blank"
                   >
                     {n.metadata.name}
                   </a>
