@@ -52,7 +52,7 @@ export default function App() {
       <br></br>   <br></br>
       <b>Why is it called Soulless?</b>
       <br></br>   <br></br>
-      Soulbound tokens are introduced as ‘non transferable’ and this application shows that private keys can be securely tradable and as a result no longer soul bound, therefore Soulless
+      Soulbound tokens are introduced as <b><i>non transferable</i></b> and this application shows that private keys can be securely tradable and as a result these tokens are no longer soul bound, therefore Soulless
       <div style={{ height: 20 }}></div>
       <Button onClick={() => setModalOpen(false)} variant="contained" color="primary">Ok</Button>
       </div>
