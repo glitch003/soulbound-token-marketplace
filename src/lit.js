@@ -1,19 +1,26 @@
 import { ethers } from "ethers";
 import pkpNftJson from "./abis/PKPNFT.json";
+import { getAllNftsOwnedByAddress } from "./utils";
 
-const litContractAddresses = {
-  stakingContractAddress: "0xA082cd2c3e6b96C1980EB6f7Db75704617F67d41",
-  multisenderContractAddress: "0x26095A1CF9c84Ac136325b2792810AFFF5407B28",
-  litTokenContractAddress: "0x1B22464798B95ff1830253369DbAf1ff40C45406",
+export const litContractAddresses = {
+  stakingContractAddress: "0x091e9b0a5A404A394377d08C0Fd8C3418075e1fe",
+  multisenderContractAddress: "0x1D907ec0CE55E7E3164Da56e50D64DC2d8933142",
+  litTokenContractAddress: "0x541C8a3D27643002fb8A37dCf42D22940B5b2F51",
   accessControlConditionsContractAddress:
-    "0x5d25a199116614Af7EA4D468B459fFbE95E8d0c5",
-  pubkeyRouterContractAddress: "0x824dbC8aa8a9fF89ff645A3cB4545b0cf211e38d",
-  pkpNftContractAddress: "0x8BE80a3DFa4b82607F469bd0E63C9a4bc2b277A9",
-  rateLimitNftContractAddress: "0x9Baf4dB90c0A2dE23675D97632407F2ecef27e04",
-  pkpHelperContractAddress: "0xDBc1F63645FDAa279854dDE26589f29806462419",
-  pkpPermissionsContractAddress: "0x6Dd9E90Ab7A3AB0984D18746066341458c3C8a47",
+    "0x6620A0e03Ca33a3818f1539DF94f9807b12B9Ec2",
+  pubkeyRouterContractAddress: "0xEA287AF8d8835eb20175875e89576bf583539B37",
+  pkpNftContractAddress: "0x86062B7a01B8b2e22619dBE0C15cbe3F7EBd0E92",
+  rateLimitNftContractAddress: "0xE094c76Ec6bad7CbA6181C8b34Bc41faC7EbdF43",
+  pkpHelperContractAddress: "0xffD53EeAD24a54CA7189596eF1aa3f1369753611",
+  pkpPermissionsContractAddress: "0x274d0C69fCfC40f71E57f81E8eA5Bd786a96B832",
+  pkpNftMetadataContractAddress: "0x46c568B561Cde9ded66Be7d8044C141481c74d0f",
   chainId: 80001,
+  rpcUrl:
+    "https://polygon-mumbai.g.alchemy.com/v2/onvoLvV97DDoLkAmdi0Cj7sxvfglKqDh",
   chainName: "mumbai",
+  litNodeDomainName: "127.0.0.1",
+  litNodePort: 7470,
+  rocketPort: 7470,
 };
 
 const getPkpContract = ({ signer }) => {
@@ -87,6 +94,12 @@ export const sendPKP = async ({ signer, toAddress, tokenId }) => {
   return sendReceipt;
 };
 
+export const getOpenseaUrl = ({ tokenId }) => {
+  return `https://testnets.opensea.io/assets/mumbai/${
+    litContractAddresses.pkpNftContractAddress
+  }/${tokenId.toString()}`;
+};
+
 export const getOwnedPKPs = async ({ signer }) => {
   const pkpContract = getPkpContract({ signer });
 
@@ -96,9 +109,34 @@ export const getOwnedPKPs = async ({ signer }) => {
   const balance = (await pkpContract.balanceOf(account)).toNumber();
   const pkps = [];
   for (let i = 0; i < balance; i++) {
+    console.log(`getting owned pkp ${i + 1} of ${balance}`);
     const tokenId = await pkpContract.tokenOfOwnerByIndex(account, i);
     const ethAddress = await pkpContract.getEthAddress(tokenId);
-    pkps.push({ tokenId, ethAddress });
+    // console.log("token id int is", tokenId.toString());
+    const openseaUrl = getOpenseaUrl({ tokenId });
+    const nftsThisWalletOwns = await getAllNftsOwnedByAddress({ ethAddress });
+    pkps.push({ tokenId, ethAddress, openseaUrl, nftsThisWalletOwns });
   }
+  console.log("owned PKPs", pkps);
   return pkps;
+};
+
+export const getAllPKPs = async ({ signer }) => {
+  const pkpContract = getPkpContract({ signer });
+  const pkpCount = (await pkpContract.totalSupply()).toNumber();
+  const pkps = [];
+  for (let i = 0; i < pkpCount; i++) {
+    console.log(`getting all pkps ${i + 1} of ${pkpCount}`);
+    const tokenId = await pkpContract.tokenByIndex(i);
+    const ethAddress = await pkpContract.getEthAddress(tokenId);
+    const openseaUrl = getOpenseaUrl({ tokenId });
+    const nftsThisWalletOwns = await getAllNftsOwnedByAddress({ ethAddress });
+    pkps.push({ tokenId, ethAddress, openseaUrl, nftsThisWalletOwns });
+  }
+  console.log("all PKPs", pkps);
+  return pkps;
+};
+
+export const getOpenseaUrlForAnyNft = ({ contractAddress, tokenId }) => {
+  return `https://testnets.opensea.io/assets/mumbai/${contractAddress}/${tokenId.toString()}`;
 };

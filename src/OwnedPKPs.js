@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
-import { getOwnedPKPs, getSigner } from "./lit";
+import {
+  getOpenseaUrl,
+  getOwnedPKPs,
+  getSigner,
+  getOpenseaUrlForAnyNft,
+} from "./lit";
 import SendPKP from "./SendPKP";
+import SellPKP from "./SellPKP";
 
 export default function OwnedPKPs() {
   const [ownedPkps, setOwnedPkps] = useState(null);
@@ -34,6 +40,23 @@ export default function OwnedPKPs() {
                 </a>
               </p>
               <SendPKP tokenId={pkp.tokenId} />
+              <SellPKP tokenId={pkp.tokenId} />
+              <button onClick={() => window.open(pkp.openseaUrl)}>
+                View on OpenSea
+              </button>
+              <div>
+                <h4>Soulbound tokens and NFTs this wallet owns</h4>
+                {pkp.nftsThisWalletOwns.ownedNfts.map((n) => (
+                  <a
+                    href={getOpenseaUrlForAnyNft({
+                      contractAddress: n.contract.address,
+                      tokenId: n.id.tokenId, // nneed to convert to int
+                    })}
+                  >
+                    {n.metadata.name}
+                  </a>
+                ))}
+              </div>
             </div>
           ))}
         </div>
